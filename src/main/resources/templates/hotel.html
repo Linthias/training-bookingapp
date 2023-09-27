@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Grade</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td th:text="${hotel.getId()}"></td>
+                <td th:text="${hotel.getHotelName()}"></td>
+                <td th:text="${hotel.getGrade()}"></td>
+                <td th:text="${hotel.getLatitude()}"></td>
+                <td th:text="${hotel.getLongitude()}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Update hotel information</p>
+    <form th:action="@{/hotels/update}" method="post">
+        <label for="hotelName">Hotel name
+            <input id="hotelName" type="text" name="hotelName">
+        </label>
+        <label for="grade">Grade (1-5)
+            <input id="grade" type="number" min="1" max="5" name="grade">
+        </label>
+        <label for="latitude">Latitude
+            <input id="latitude" type="number" min="-90" max="90" step="0.000001" name="latitude">
+        </label>
+        <label for="longitude">Longitude
+            <input id="longitude" type="number" min="-90" max="90" step="0.000001" name="longitude">
+        </label>
+        <input type="submit" value="Update" />
+    </form>
+    <p>Add new room to hotel</p>
+    <form th:action="@{/rooms/create}" method="post">
+        <input id="id" type="hidden" name="id" value="1">
+        <input id="hotelId" type="hidden" name="hotelId" th:value="${hotel.getId()}">
+        <label for="capacity">Room capacity
+            <input id="capacity" type="number" name="capacity">
+        </label>
+        <label for="roomName">Room name
+            <input id="roomName" type="text" name="roomName">
+        </label>
+        <label for="pricePerNight">Price per night
+            <input id="pricePerNight" type="number" step="0.01" name="pricePerNight">
+        </label>
+        <input type="submit" value="Create" />
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Capacity</th>
+                <th>Price per night</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="room, iterStat : ${hotel.getRooms()}">
+                <td th:text="'Id=' + ${room.getId()}"></td>
+                <td th:text="'Name=' + ${room.getRoomName()}"></td>
+                <td th:text="'Capacity=' + ${room.getCapacity()}"></td>
+                <td th:text="'Price per night=' + ${room.getPricePerNight()}"></td>
+                <td><a th:href="@{/rooms/{roomId}(roomId=${room.getId()})}">View room</a></td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <a th:href="@{/hotels/all}">
+        <button>Back to hotel list</button>
+    </a>
+    <a th:href="@{/hotels/menu}">
+        <button>Back to hotel and room menu</button>
+    </a>
+    <a th:href="@{/}">
+        <button>Back to main page</button>
+    </a>
+</body>
+</html>

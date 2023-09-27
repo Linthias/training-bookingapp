@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotels</title>
+</head>
+<body>
+    <table>
+        <thead>
+        <tr>
+            <th>Details</th>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Grade</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Rooms</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="hotel, iterStat : ${hotels}">
+            <td><a th:href="@{/hotels/{hotelId}(hotelId=${hotel.getId()})}">View</a></td>
+            <td th:text="${hotel.getId()}"></td>
+            <td th:text="${hotel.getHotelName()}"></td>
+            <td th:text="${hotel.getGrade()}"></td>
+            <td th:text="${hotel.getLatitude()}"></td>
+            <td th:text="${hotel.getLongitude()}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/hotels/menu}">
+        <button>Back to hotel and room menu</button>
+    </a>
+    <a th:href="@{/}">
+        <button>Back to main page</button>
+    </a>
+</body>
+</html>

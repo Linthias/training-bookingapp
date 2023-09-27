@@ -1,0 +1,221 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="39406 (generated)" id="1695826037994-1">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user"/>
+            </column>
+            <column name="user_name" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_password" type="VARCHAR(80)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_role" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-2">
+        <insert tableName="users">
+            <column name="id" valueNumeric="1"/>
+            <column name="user_name" value="John Doe"/>
+            <column name="user_password" value="$2a$12$X4xKrDRAHp8EWEQu8FHzwOCPbVp/qv0j3q6pjbJiIYsHyjWEdWvHq"/>
+            <column name="user_role" value="MANAGER"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="2"/>
+            <column name="user_name" value="Mary Sue"/>
+            <column name="user_password" value="$2a$12$pIHChkQEnk8y.7MQQebmieuoLMjgyYmdQ/4pcBh1UFpeGehFiVO6C"/>
+            <column name="user_role" value="USER"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="3"/>
+            <column name="user_name" value="Marty Stew"/>
+            <column name="user_password" value="$2a$12$C9srqtuzEuQtSii.X.zqKOIVwFsVHMgF0FIJKZ4SDEOIcT3liQvaa"/>
+            <column name="user_role" value="USER"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="4"/>
+            <column name="user_name" value="Piper Wright"/>
+            <column name="user_password" value="$2a$12$evbwG.p/Miwf7M84yIxFM.oemEhVN2QtLoCje0pYSUSQLKTq/F9vC"/>
+            <column name="user_role" value="USER"/>
+        </insert>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-3">
+        <addUniqueConstraint columnNames="user_name" constraintName="uq_user_name" tableName="users"/>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-4">
+        <createTable tableName="bookings">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_booking"/>
+            </column>
+            <column name="room_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hotel_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="booking_start" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="booking_end" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-5">
+        <createTable tableName="hotels">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_hotel"/>
+            </column>
+            <column name="hotel_name" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="grade" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="latitude" type="FLOAT8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="FLOAT8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-6">
+        <createTable tableName="rooms">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_room"/>
+            </column>
+            <column name="hotel_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="capacity" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="room_name" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price_per_night" type="numeric(10, 2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-7">
+        <insert tableName="bookings">
+            <column name="id" valueNumeric="1"/>
+            <column name="room_id" valueNumeric="2"/>
+            <column name="user_id" valueNumeric="3"/>
+            <column name="hotel_id" valueNumeric="2"/>
+            <column name="booking_start" valueDate="2023-06-29"/>
+            <column name="booking_end" valueDate="2023-06-30"/>
+        </insert>
+        <insert tableName="bookings">
+            <column name="id" valueNumeric="2"/>
+            <column name="room_id" valueNumeric="3"/>
+            <column name="user_id" valueNumeric="2"/>
+            <column name="hotel_id" valueNumeric="1"/>
+            <column name="booking_start" valueDate="2023-07-15"/>
+            <column name="booking_end" valueDate="2023-08-15"/>
+        </insert>
+        <insert tableName="bookings">
+            <column name="id" valueNumeric="3"/>
+            <column name="room_id" valueNumeric="4"/>
+            <column name="user_id" valueNumeric="3"/>
+            <column name="hotel_id" valueNumeric="3"/>
+            <column name="booking_start" valueDate="2023-04-13"/>
+            <column name="booking_end" valueDate="2023-04-15"/>
+        </insert>
+        <insert tableName="bookings">
+            <column name="id" valueNumeric="4"/>
+            <column name="room_id" valueNumeric="3"/>
+            <column name="user_id" valueNumeric="4"/>
+            <column name="hotel_id" valueNumeric="1"/>
+            <column name="booking_start" valueDate="2023-02-01"/>
+            <column name="booking_end" valueDate="2023-02-11"/>
+        </insert>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-8">
+        <insert tableName="hotels">
+            <column name="id" valueNumeric="1"/>
+            <column name="hotel_name" value="Sunrise Blue"/>
+            <column name="grade" valueNumeric="4"/>
+            <column name="latitude" valueNumeric="256.3"/>
+            <column name="longitude" valueNumeric="178.4"/>
+        </insert>
+        <insert tableName="hotels">
+            <column name="id" valueNumeric="2"/>
+            <column name="hotel_name" value="No Tell Motel"/>
+            <column name="grade" valueNumeric="1"/>
+            <column name="latitude" valueNumeric="57.2"/>
+            <column name="longitude" valueNumeric="78.1"/>
+        </insert>
+        <insert tableName="hotels">
+            <column name="id" valueNumeric="3"/>
+            <column name="hotel_name" value="Old Yard"/>
+            <column name="grade" valueNumeric="3"/>
+            <column name="latitude" valueNumeric="99.9"/>
+            <column name="longitude" valueNumeric="44.4"/>
+        </insert>
+        <insert tableName="hotels">
+            <column name="id" valueNumeric="4"/>
+            <column name="hotel_name" value="Royal Palace"/>
+            <column name="grade" valueNumeric="5"/>
+            <column name="latitude" valueNumeric="201.1"/>
+            <column name="longitude" valueNumeric="136.9"/>
+        </insert>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-9">
+        <insert tableName="rooms">
+            <column name="id" valueNumeric="1"/>
+            <column name="hotel_id" valueNumeric="4"/>
+            <column name="capacity" valueNumeric="5"/>
+            <column name="room_name" value="Ocean View"/>
+            <column name="price_per_night" valueNumeric="799.99"/>
+        </insert>
+        <insert tableName="rooms">
+            <column name="id" valueNumeric="2"/>
+            <column name="hotel_id" valueNumeric="2"/>
+            <column name="capacity" valueNumeric="2"/>
+            <column name="room_name" value="Wont tell"/>
+            <column name="price_per_night" valueNumeric="2799.99"/>
+        </insert>
+        <insert tableName="rooms">
+            <column name="id" valueNumeric="3"/>
+            <column name="hotel_id" valueNumeric="1"/>
+            <column name="capacity" valueNumeric="1"/>
+            <column name="room_name" value="Singleton Ocean"/>
+            <column name="price_per_night" valueNumeric="399.99"/>
+        </insert>
+        <insert tableName="rooms">
+            <column name="id" valueNumeric="4"/>
+            <column name="hotel_id" valueNumeric="3"/>
+            <column name="capacity" valueNumeric="2"/>
+            <column name="room_name" value="Royal Mile View"/>
+            <column name="price_per_night" valueNumeric="499.99"/>
+        </insert>
+        <insert tableName="rooms">
+            <column name="id" valueNumeric="5"/>
+            <column name="hotel_id" valueNumeric="2"/>
+            <column name="capacity" valueNumeric="2"/>
+            <column name="room_name" value="Definitely Wont tell"/>
+            <column name="price_per_night" valueNumeric="3799.99"/>
+        </insert>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-10">
+        <addForeignKeyConstraint baseColumnNames="hotel_id" baseTableName="bookings" constraintName="fk_hotel" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="hotels" validate="true"/>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-11">
+        <addForeignKeyConstraint baseColumnNames="hotel_id" baseTableName="rooms" constraintName="fk_hotel" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="hotels" validate="true"/>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-12">
+        <addForeignKeyConstraint baseColumnNames="room_id" baseTableName="bookings" constraintName="fk_room" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="rooms" validate="true"/>
+    </changeSet>
+    <changeSet author="39406 (generated)" id="1695826037994-13">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="bookings" constraintName="fk_user" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

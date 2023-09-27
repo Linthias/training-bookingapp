@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Room</title>
+</head>
+<body>
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Capacity</th>
+            <th>Price per night</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="'Id=' + ${room.getId()}"></td>
+            <td th:text="'Name=' + ${room.getRoomName()}"></td>
+            <td th:text="'Capacity=' + ${room.getCapacity()}"></td>
+            <td th:text="'Price per night=' + ${room.getPricePerNight()}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <p>Edit room</p>
+    <form th:action="@{/rooms/update}" method="post">
+        <input id="id" type="hidden" name="id" th:value="${room.getId()}">
+        <input id="hotelId" type="hidden" name="hotelId" th:value="${room.getHotelId()}">
+        <label for="capacity">Room capacity
+            <input id="capacity" type="number" name="capacity">
+        </label>
+        <label for="roomName">Room name
+            <input id="roomName" type="text" name="roomName">
+        </label>
+        <label for="pricePerNight">Price per night
+            <input id="pricePerNight" type="number" step="0.01" name="pricePerNight">
+        </label>
+        <input type="submit" value="Update" />
+    </form>
+    <p>Create new booking of this room</p>
+    <form th:action="@{/bookings/create}" method="post">
+        <input id="bookingId" type="hidden" name="bookingId" value="1">
+        <input id="bookingRoomId" type="hidden" name="bookingRoomId" th:value="${room.getId()}">
+        <label for="userName">User name
+            <input id="userName" type="text" name="userName">
+        </label>
+        <input id="bookingHotelId" type="hidden" name="bookingHotelId" th:value="${room.getHotelId()}">
+        <label for="bookingStart">Booking start
+            <input id="bookingStart" type="date" name="bookingStart">
+        </label>
+        <label for="bookingEnd">Booking end
+            <input id="bookingEnd" type="date" name="bookingEnd">
+        </label>
+        <input type="submit" value="Create" />
+    </form>
+    <a th:href="@{/hotels/{hotelId}(hotelId=${room.getHotelId()})}">
+        <button>Back to hotel</button>
+    </a>
+    <a th:href="@{/hotels/all}">
+        <button>Back to hotel list</button>
+    </a>
+    <a th:href="@{/hotels/menu}">
+        <button>Back to hotel and room menu</button>
+    </a>
+    <a th:href="@{/}">
+        <button>Back to main page</button>
+    </a>
+</body>
+</html>

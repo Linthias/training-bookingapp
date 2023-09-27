@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking menu</title>
+</head>
+<body>
+    <ul>
+        <li>
+            <p>Get my bookings</p>
+            <form th:action="@{/bookings/mine}" method="get">
+                <label for="user">User name
+                    <input id="user" type="text" name="user">
+                </label>
+                <input type="submit" value="Get" />
+            </form>
+        </li>
+        <li>
+            <a th:href="@{/bookings/all}"><button>Get all bookings (manager only)</button></a>
+        </li>
+    </ul>
+    <a th:href="@{/}">
+        <button>Back to main page</button>
+    </a>
+</body>
+</html>

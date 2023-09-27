@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Hotel name</th>
+                <th>Hotel grade</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Room name</th>
+                <th>Room capacity</th>
+                <th>Price per night</th>
+                <th>User name</th>
+                <th>Booking start</th>
+                <th>Booking end</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td th:text="${booking.getId()}"></td>
+                <td th:text="${booking.getHotel().getHotelName()}"></td>
+                <td th:text="${booking.getHotel().getGrade()}"></td>
+                <td th:text="${booking.getHotel().getLatitude()}"></td>
+                <td th:text="${booking.getHotel().getLongitude()}"></td>
+                <td th:text="${booking.getRoom().getRoomName()}"></td>
+                <td th:text="${booking.getRoom().getCapacity()}"></td>
+                <td th:text="${booking.getRoom().getPricePerNight()}"></td>
+                <td th:text="${booking.getUserName()}"></td>
+                <td th:text="${booking.getBookingStart()}"></td>
+                <td th:text="${booking.getBookingEnd()}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Edit booking</p>
+    <form th:action="@{/bookings/update}" method="post">
+        <input id="bookingId" type="hidden" name="bookingId" th:value="${booking.getId()}">
+        <input id="bookingRoomId" type="hidden" name="bookingRoomId" th:value="${booking.getRoom().getId()}">
+        <input id="userName" type="hidden" name="userName">
+        <input id="bookingHotelId" type="hidden" name="bookingHotelId" th:value="${booking.getHotel().getId()}">
+        <label for="bookingStart">Booking start
+            <input id="bookingStart" type="date" name="bookingStart">
+        </label>
+        <label for="bookingEnd">Booking end
+            <input id="bookingEnd" type="date" name="bookingEnd">
+        </label>
+        <input type="submit" value="Update" />
+    </form>
+    <a th:href="@{/bookings/menu}">
+        <button>Back to booking menu</button>
+    </a>
+    <a th:href="@{/}">
+        <button>Back to main page</button>
+    </a>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel menu</title>
+</head>
+<body>
+    <ul>
+        <li>
+            <p>Create new hotel</p>
+            <form th:action="@{/hotels/create}" method="post">
+                <ul>
+                    <li>
+                        <input id="id" type="hidden" name="id" value="1">
+                    </li>
+                    <li>
+                        <label for="hotelName">Hotel name
+                            <input id="hotelName" type="text" name="hotelName">
+                        </label>
+                    </li>
+                    <li>
+                        <label for="grade">Grade (1-5)
+                            <input id="grade" type="number" min="1" max="5" name="grade">
+                        </label>
+                    </li>
+                    <li>
+                        <label for="latitude">Latitude
+                            <input id="latitude" type="number" min="-90" max="90" step="0.000001" name="latitude">
+                        </label>
+                    </li>
+                    <li>
+                        <label for="longitude">Longitude
+                            <input id="longitude" type="number" min="-90" max="90" step="0.000001" name="longitude">
+                        </label>
+                    </li>
+                    <li>
+                        <input type="submit" value="Create" />
+                    </li>
+                </ul>
+            </form>
+        </li>
+        <li>
+            <p>Get all hotels</p>
+            <form th:action="@{/hotels/all}" method="get">
+                <input type="submit" value="Get all" />
+            </form>
+        </li>
+        <li>
+            <p>Get hotels with available rooms</p>
+            <form th:action="@{/hotels/search}" method="get">
+                <ul>
+                    <li>
+                        <label for="bookingEnd">Booking start
+                            <input id="bookingEnd" type="date" name="bookingEnd">
+                        </label>
+                    </li>
+                    <li>
+                        <label for="bookingStart">Booking end
+                            <input id="bookingStart" type="date" name="bookingStart">
+                        </label>
+                    </li>
+                    <li>
+                        <input type="submit" value="Get" />
+                    </li>
+                </ul>
+            </form>
+        </li>
+    </ul>
+    <a th:href="@{/}">
+      <button>Back to main page</button>
+    </a>
+</body>
+</html>
