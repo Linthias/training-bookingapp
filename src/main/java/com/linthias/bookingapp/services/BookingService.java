@@ -7,6 +7,8 @@ import com.linthias.bookingapp.dtos.BookingInputDto;
 import com.linthias.bookingapp.dtos.BookingOutputDto;
 import com.linthias.bookingapp.dtos.HotelInputDto;
 import com.linthias.bookingapp.dtos.RoomDto;
+import com.linthias.bookingapp.exceptions.DatesAreOccupiedException;
+import com.linthias.bookingapp.exceptions.DtoNotValidException;
 import com.linthias.bookingapp.models.Booking;
 import com.linthias.bookingapp.models.Room;
 import com.linthias.bookingapp.models.User;
@@ -33,10 +35,29 @@ public class BookingService {
     private final BaseDtoMapper<Room, RoomDto, RoomDto> roomMapper;
     private final HotelDtoMapper hotelMapper;
 
-    public BookingOutputDto add(BookingInputDto input) {
+    private void validateInput(BookingInputDto input) throws DtoNotValidException {
         if (!validator.isValid(input)) {
-            throw new RuntimeException("");
+            throw new DtoNotValidException("incorrect input: " + input.getClass().getName());
         }
+    }
+
+    private void validateAvailability(BookingInputDto input) throws DatesAreOccupiedException {
+        List<Booking> existingBookings = repository.findByRoomId(input.getBookingRoomId());
+
+        for (Booking bk : existingBookings) {
+            if (input.getBookingStart().isBefore(bk.getBookingEnd())
+                    && input.getBookingStart().isAfter(bk.getBookingStart())
+                    || input.getBookingEnd().isBefore(bk.getBookingEnd())
+                    && input.getBookingEnd().isAfter(bk.getBookingStart())) {
+                throw new DatesAreOccupiedException("occupied period: " + input.getBookingStart() + "-" + input.getBookingEnd());
+            }
+        }
+    }
+
+    public BookingOutputDto add(BookingInputDto input) throws DtoNotValidException, DatesAreOccupiedException {
+        validateInput(input);
+
+        validateAvailability(input);
 
         User user = userRepository.findByName(input.getUserName());
 
@@ -44,7 +65,11 @@ public class BookingService {
 
         HotelInputDto hotel = hotelMapper.customToSmallDto(hotelRepository.findById(booking.getHotelId()));
 
-        return mapper.customToDto(booking, user, roomMapper.toDto(roomRepository.findById(booking.getRoomId())), hotel);
+        return mapper.customToDto(
+                booking,
+                user,
+                roomMapper.toDto(roomRepository.findById(booking.getRoomId())),
+                hotel);
     }
 
     public BookingOutputDto getById(Long id) {
@@ -53,7 +78,11 @@ public class BookingService {
 
         HotelInputDto hotel = hotelMapper.customToSmallDto(hotelRepository.findById(booking.getHotelId()));
 
-        return mapper.customToDto(booking, user, roomMapper.toDto(roomRepository.findById(booking.getRoomId())), hotel);
+        return mapper.customToDto(
+                booking,
+                user,
+                roomMapper.toDto(roomRepository.findById(booking.getRoomId())),
+                hotel);
     }
 
     public List<BookingOutputDto> getAll() {
@@ -62,7 +91,8 @@ public class BookingService {
                         booking,
                 userRepository.findById(booking.getUserId()),
                 roomMapper.toDto(roomRepository.findById(booking.getRoomId())),
-                hotelMapper.customToSmallDto(hotelRepository.findById(booking.getHotelId())))).collect(Collectors.toList());
+                hotelMapper.customToSmallDto(
+                        hotelRepository.findById(booking.getHotelId())))).collect(Collectors.toList());
     }
 
     public List<BookingOutputDto> getMyBookings(String user) {
@@ -75,19 +105,24 @@ public class BookingService {
                 booking,
                 userRepository.findById(booking.getUserId()),
                 roomMapper.toDto(roomRepository.findById(booking.getRoomId())),
-                hotelMapper.customToSmallDto(hotelRepository.findById(booking.getHotelId())))).collect(Collectors.toList());
+                hotelMapper.customToSmallDto(
+                        hotelRepository.findById(booking.getHotelId())))).collect(Collectors.toList());
     }
 
-    public BookingOutputDto update(BookingInputDto input) {
-        if (!validator.isValid(input)) {
-            throw new RuntimeException("");
-        }
+    public BookingOutputDto update(BookingInputDto input) throws DtoNotValidException, DatesAreOccupiedException {
+        validateInput(input);
+
+        validateAvailability(input);
 
         Booking booking = repository.update(mapper.toEntity(input));
         User user = userRepository.findById(booking.getUserId());
 
         HotelInputDto hotel = hotelMapper.customToSmallDto(hotelRepository.findById(booking.getHotelId()));
 
-        return mapper.customToDto(booking, user, roomMapper.toDto(roomRepository.findById(booking.getRoomId())), hotel);
+        return mapper.customToDto(
+                booking,
+                user,
+                roomMapper.toDto(roomRepository.findById(booking.getRoomId())),
+                hotel);
     }
 }

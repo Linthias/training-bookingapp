@@ -5,6 +5,7 @@ import com.linthias.bookingapp.dtomappers.HotelDtoMapper;
 import com.linthias.bookingapp.dtos.HotelInputDto;
 import com.linthias.bookingapp.dtos.HotelOutputDto;
 import com.linthias.bookingapp.dtos.RoomDto;
+import com.linthias.bookingapp.exceptions.DtoNotValidException;
 import com.linthias.bookingapp.models.Booking;
 import com.linthias.bookingapp.models.Hotel;
 import com.linthias.bookingapp.models.Room;
@@ -30,20 +31,28 @@ public class HotelService {
     private final HotelDtoMapper mapper;
     private final BaseDtoMapper<Room, RoomDto, RoomDto> roomMapper;
 
-    public HotelOutputDto add(HotelInputDto input) {
+    private void validateInput(HotelInputDto input) throws DtoNotValidException {
         if (!validator.isValid(input)) {
-            throw new RuntimeException("");
+            throw new DtoNotValidException("incorrect input: " + input.getClass().getName());
         }
+    }
+
+    public HotelOutputDto add(HotelInputDto input) throws DtoNotValidException {
+        validateInput(input);
 
         Hotel hotel = repository.create(mapper.toEntity(input));
 
-        return mapper.customToDto(hotel,
-                roomRepository.findByHotelId(hotel.getId()).stream().map(roomMapper::toDto).collect(Collectors.toList()));
+        return mapper.customToDto(
+                hotel,
+                roomRepository.findByHotelId(hotel.getId())
+                        .stream().map(roomMapper::toDto).collect(Collectors.toList()));
     }
 
     public HotelOutputDto getById(Long id) {
-        return mapper.customToDto(repository.findById(id),
-                roomRepository.findByHotelId(id).stream().map(roomMapper::toDto).collect(Collectors.toList()));
+        return mapper.customToDto(
+                repository.findById(id),
+                roomRepository.findByHotelId(id)
+                        .stream().map(roomMapper::toDto).collect(Collectors.toList()));
     }
 
     public List<HotelOutputDto> getAll() {
@@ -61,30 +70,37 @@ public class HotelService {
                     for (Room room : rooms) {
                         List<Booking> bookings = bookingRepository.findByRoomId(room.getId());
                         boolean isAvailable = true;
+
                         for (Booking booking : bookings) {
-                            if (bookingStart.isBefore(booking.getBookingEnd()) && bookingStart.isAfter(booking.getBookingStart())
-                                    || bookingEnd.isBefore(booking.getBookingEnd()) && bookingEnd.isAfter(booking.getBookingStart())) {
+                            if (bookingStart.isBefore(booking.getBookingEnd())
+                                    && bookingStart.isAfter(booking.getBookingStart())
+                                    || bookingEnd.isBefore(booking.getBookingEnd())
+                                    && bookingEnd.isAfter(booking.getBookingStart())) {
                                 isAvailable = false;
                                 break;
                             }
                         }
+
                         if (isAvailable) {
                             availableRooms.add(room);
                         }
                     }
 
-                    return mapper.customToDto(hotel, availableRooms.stream().map(roomMapper::toDto).collect(Collectors.toList()));
+                    return mapper.customToDto(
+                            hotel,
+                            availableRooms
+                                    .stream().map(roomMapper::toDto).collect(Collectors.toList()));
                 }).collect(Collectors.toList());
     }
 
-    public HotelOutputDto update(HotelInputDto input) {
-        if (!validator.isValid(input)) {
-            throw new RuntimeException("");
-        }
+    public HotelOutputDto update(HotelInputDto input) throws DtoNotValidException {
+        validateInput(input);
 
         Hotel hotel = repository.update(mapper.toEntity(input));
 
-        return mapper.customToDto(hotel,
-                roomRepository.findByHotelId(hotel.getId()).stream().map(roomMapper::toDto).collect(Collectors.toList()));
+        return mapper.customToDto(
+                hotel,
+                roomRepository.findByHotelId(hotel.getId())
+                        .stream().map(roomMapper::toDto).collect(Collectors.toList()));
     }
 }

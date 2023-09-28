@@ -1,6 +1,7 @@
 package com.linthias.bookingapp.controllers;
 
 import com.linthias.bookingapp.dtos.HotelInputDto;
+import com.linthias.bookingapp.exceptions.DtoNotValidException;
 import com.linthias.bookingapp.services.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,14 +45,14 @@ public class HotelController {
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('MANAGER')")
-    public String create(HotelInputDto hotel, Model model) {
+    public String create(HotelInputDto hotel, Model model) throws DtoNotValidException {
         model.addAttribute("hotel", service.add(hotel));
         return "hotel";
     }
 
     @PostMapping("/update")
     @PreAuthorize("hasAuthority('MANAGER')")
-    public String update(HotelInputDto hotel, Model model) {
+    public String update(HotelInputDto hotel, Model model) throws DtoNotValidException {
         model.addAttribute("hotel", service.update(hotel));
         return "hotel";
     }

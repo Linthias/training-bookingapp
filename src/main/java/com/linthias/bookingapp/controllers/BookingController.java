@@ -1,6 +1,8 @@
 package com.linthias.bookingapp.controllers;
 
 import com.linthias.bookingapp.dtos.BookingInputDto;
+import com.linthias.bookingapp.exceptions.DatesAreOccupiedException;
+import com.linthias.bookingapp.exceptions.DtoNotValidException;
 import com.linthias.bookingapp.services.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,14 +45,14 @@ public class BookingController {
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('MANAGER')")
-    public String create(BookingInputDto booking, Model model) {
+    public String create(BookingInputDto booking, Model model) throws DtoNotValidException, DatesAreOccupiedException {
         model.addAttribute("booking", service.add(booking));
         return "booking";
     }
 
     @PostMapping("/update")
     @PreAuthorize("hasAuthority('MANAGER')")
-    public String update(BookingInputDto booking, Model model) {
+    public String update(BookingInputDto booking, Model model) throws DtoNotValidException, DatesAreOccupiedException {
         model.addAttribute("booking", service.update(booking));
         return "booking";
     }

@@ -1,4 +1,4 @@
-package com.linthias.bookingapp;
+package com.linthias.bookingapp.util;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

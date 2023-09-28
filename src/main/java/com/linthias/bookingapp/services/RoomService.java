@@ -2,31 +2,28 @@ package com.linthias.bookingapp.services;
 
 import com.linthias.bookingapp.dtomappers.BaseDtoMapper;
 import com.linthias.bookingapp.dtos.RoomDto;
+import com.linthias.bookingapp.exceptions.DtoNotValidException;
 import com.linthias.bookingapp.models.Room;
 import com.linthias.bookingapp.repositories.BaseRepository;
 import com.linthias.bookingapp.validators.BaseValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RoomService {
     private final BaseRepository<Room> repository;
     private final BaseValidator<RoomDto> validator;
     private final BaseDtoMapper<Room, RoomDto, RoomDto> mapper;
 
-    @Autowired
-    public RoomService(BaseRepository<Room> repository,
-                       BaseValidator<RoomDto> validator,
-                       BaseDtoMapper<Room, RoomDto, RoomDto> mapper) {
-        this.repository = repository;
-        this.validator = validator;
-        this.mapper = mapper;
+    private void validateInput(RoomDto input) throws DtoNotValidException {
+        if (!validator.isValid(input)) {
+            throw new DtoNotValidException("incorrect input: " + input.getClass().getName());
+        }
     }
 
-    public RoomDto add(RoomDto input) {
-        if (!validator.isValid(input)) {
-            throw new RuntimeException("");
-        }
+    public RoomDto add(RoomDto input) throws DtoNotValidException {
+        validateInput(input);
 
         return mapper.toDto(repository.create(mapper.toEntity(input)));
     }
@@ -35,10 +32,8 @@ public class RoomService {
         return mapper.toDto(repository.findById(id));
     }
 
-    public RoomDto update(RoomDto input) {
-        if (!validator.isValid(input)) {
-            throw new RuntimeException("");
-        }
+    public RoomDto update(RoomDto input) throws DtoNotValidException {
+        validateInput(input);
 
         return mapper.toDto(repository.update(mapper.toEntity(input)));
     }

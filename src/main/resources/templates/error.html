@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error page</title>
+</head>
+<body>
+    <p th:text="'Error: ' + ${error.getHttpCode()}"></p>
+    <br>
+    <p th:text="'Message: ' + ${error.getErrorMessage()}"></p>
+    <br>
+    <p th:text="'Cause: ' + ${error.getExceptionName()}"></p>
+    <br>
+    <a th:href="@{/}">
+        <button>Back to main page</button>
+    </a>
+</body>
+</html>
